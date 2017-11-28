@@ -6,14 +6,15 @@
 	model = "RS353 - Bintec Elmeg RS353";
 
 	chosen {
-		bootargs = "console=ttyLTQ0,115200 init=/etc/preinit";
-		leds {
-			running = &status;
-			boot = &status;
-			wifi = &wlan;
-			usb2 = &usb; /* Front port is mapped to device 2 */
-			dsl = &dsl;
-		};
+		bootargs = "console=ttyLTQ0,115200";
+	};
+
+	aliases {
+		led-running = &status;
+		led-boot = &status;
+		led-wifi = &wlan;
+		led-usb2 = &usb; /* Front port is mapped to device 2 */
+		led-dsl = &dsl;
 	};
 
 	memory@0 {
@@ -103,7 +104,7 @@
 
 		pcie@d900000 {
 			status = "okay";
-			gpio-reset = <&gpio 18 0>;
+			gpio-reset = <&gpio 18 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -152,22 +153,22 @@
 
 		wlan: wlan {
 			label = "rs353:green:wlan";
-			gpios = <&gpio 28 1>;
+			gpios = <&gpio 28 GPIO_ACTIVE_LOW>;
 		};
 
 		dsl: dsl {
 			label = "rs353:green:dsl";
-			gpios = <&gpio 8 1>;
+			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
 		};
 
 		usb: usb {
 			label = "rs353:green:usb";
-			gpios = <&gpio 11 1>;
+			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
 		};
 
 		status: status {
 			label = "rs353:green:status";
-			gpios = <&gpio 12 1>;
+			gpios = <&gpio 12 GPIO_ACTIVE_LOW>;
 		};
 	};
 };
