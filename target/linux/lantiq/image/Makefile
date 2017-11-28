@@ -52,6 +52,17 @@ define Build/fullimage
 	rm $@.tmp
 endef
 
+define Build/lzma-loader
+	rm -rf $(KDIR)/lzma-loader
+	$(NO_TRACE_MAKE) -C lzma-loader \
+		KDIR=$(KDIR) \
+		LZMA_TEXT_START=0x80a00000 \
+		LOADADDR=0x80002000 \
+		LOADER_DATA="$@" \
+		compile
+	cp $(KDIR)/lzma-loader/loader.bin $@
+endef
+
 # Shared device definition: applies to every defined device
 define Device/Default
   PROFILES = Default
@@ -347,6 +358,36 @@ define Device/GIGASX76X
 endef
 TARGET_DEVICES += GIGASX76X
 
+define Build/rs230-ced
+	rm -f $(KDIR)/boss.bin.gz
+	# Add CEV header (magic). The name "boss.bin" have to be in the gzip header.
+	echo -ne "\x10\x00\x00\x02\x00\x00\x00\x00\x43\x45\x44\x00\x00\x00\x00\x00" > $(KDIR)/boss.bin
+	# Append data
+	cat $@ >> $(KDIR)/boss.bin
+	# gzip the file
+	gzip $(KDIR)/boss.bin
+	# Add a fake BOSS header to align image to flash sectors.
+	dd if=/dev/zero of=$(KDIR)/boss.1 bs=52 count=1
+	cat $(KDIR)/boss.bin.gz >> $(KDIR)/boss.1
+	# Align with flash sector size minus boss header size
+	dd if=$(KDIR)/boss.1 of=$@ bs=131072 conv=sync
+endef
+
+define Build/rs230-boss-header
+	mkbossimg rs230 $@
+	mv bossImage.img $@
+endef
+
+define Device/RS230
+  DEVICE_PROFILE := RS230
+  DEVICE_TITLE := Bintec RS230
+  KERNEL := kernel-bin | append-dtb | lzma | lzma-loader | rs230-ced
+  IMAGE/boss-image.ced = append-kernel | append-rootfs | pad-rootfs | rs230-boss-header
+  IMAGES := boss-image.ced
+  IMAGE_SIZE := 15872k
+  DEVICE_PACKAGES := kmod-usb-dwc2 wpad-mini kmod-i2c-gpio kmod-swconfig kmod-ledtrig-usbdev
+endef
+TARGET_DEVICES += RS230
 
 # AR9
 
@@ -557,6 +598,37 @@ define Device/FRITZ7360SL
   DEVICE_PACKAGES := kmod-ath9k kmod-owl-loader wpad-mini kmod-usb-dwc2
 endef
 TARGET_DEVICES += FRITZ7360SL
+
+define Build/rs353-cev
+	rm -f $(KDIR)/boss.bin.gz
+	# Add CEV header (magic). The name "boss.bin" have to be in the gzip header.
+	echo -ne "\x10\x00\x00\x02\x00\x00\x00\x00\x43\x45\x56\x00\x00\x00\x00\x00" > $(KDIR)/boss.bin
+	# Append data
+	cat $@ >> $(KDIR)/boss.bin
+	# gzip the file
+	gzip $(KDIR)/boss.bin
+	# Add a fake BOSS header to align image to flash sectors.
+	dd if=/dev/zero of=$(KDIR)/boss.1 bs=52 count=1
+	cat $(KDIR)/boss.bin.gz >> $(KDIR)/boss.1
+	# Align with flash sector size minus boss header size
+	dd if=$(KDIR)/boss.1 of=$@ bs=131072 conv=sync
+endef
+
+define Build/rs353-boss-header
+	mkbossimg rs353 $@
+	mv bossImage.img $@
+endef
+
+define Device/RS353
+  DEVICE_PROFILE := RS353
+  DEVICE_TITLE := Bintec RS353
+  KERNEL := kernel-bin | append-dtb | lzma | lzma-loader | rs353-cev
+  IMAGE/boss-image.cev = append-kernel | append-rootfs | pad-rootfs | rs353-boss-header
+  IMAGES := boss-image.cev
+  IMAGE_SIZE := 31232k
+  DEVICE_PACKAGES := kmod-usb-dwc2 kmod-ath9k wpad-mini kmod-i2c-gpio kmod-swconfig wpad-mini kmod-ledtrig-usbdev
+endef
+TARGET_DEVICES += RS353
 
 define Device/VG3503J
   IMAGE_SIZE := 8000k
