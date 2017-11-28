@@ -29,4 +29,5 @@ extern int mtd_fixtrx(const char *mtd, size_t offset, size_t data_size) __attrib
 extern int mtd_fixseama(const char *mtd, size_t offset, size_t data_size) __attribute__ ((weak));
 extern int mtd_fixwrgg(const char *mtd, size_t offset, size_t data_size) __attribute__ ((weak));
 extern int mtd_resetbc(const char *mtd) __attribute__ ((weak));
+extern int mtd_fixboss(const char *mtd, size_t offset, size_t data_size) __attribute__ ((weak));
 #endif /* __mtd_h */

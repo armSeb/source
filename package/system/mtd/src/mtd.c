@@ -797,6 +797,7 @@ int main (int argc, char **argv)
 		CMD_UNLOCK,
 		CMD_JFFS2WRITE,
 		CMD_FIXTRX,
+		CMD_FIXBOSS,
 		CMD_FIXSEAMA,
 		CMD_FIXWRGG,
 		CMD_VERIFY,
@@ -1001,6 +1002,11 @@ int main (int argc, char **argv)
 		case CMD_FIXTRX:
 			if (mtd_fixtrx) {
 				mtd_fixtrx(device, offset, data_size);
+			}
+			break;
+		case CMD_FIXBOSS:
+			if (mtd_fixboss) {
+				mtd_fixboss(device, offset, data_size);
 			}
 			break;
 		case CMD_RESETBC:
