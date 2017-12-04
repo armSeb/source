@@ -11,12 +11,10 @@ do_fixboss() {
 	mtd fixboss firmware 1>/tmp/fixboss.log 2>&1
 }
 
-board=$(lantiq_board_name)
+board=$(board_name)
 case $board in
 RS230|RS353)
         do_fixboss
 	return 0
         ;;
 esac
-
-

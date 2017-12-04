@@ -730,6 +730,10 @@ static void usage(void)
 	    fprintf(stderr,
 	"        fixtrx                  fix the checksum in a trx header on first boot\n");
 	}
+	if (mtd_fixboss) {
+	    fprintf(stderr,
+	"        fixboss        fix the boss checksum in bootmonitor parameters\n");
+	}
 	if (mtd_fixseama) {
 	    fprintf(stderr,
 	"        fixseama                fix the checksum in a seama header on first boot\n");
@@ -751,13 +755,13 @@ static void usage(void)
 	"        -s <number>             skip the first n bytes when appending data to the jffs2 partiton, defaults to \"0\"\n"
 	"        -p <number>             write beginning at partition offset\n"
 	"        -l <length>             the length of data that we want to dump\n");
-	if (mtd_fixtrx) {
+	if (mtd_fixtrx || mtd_fixboss) {
 	    fprintf(stderr,
-	"        -o offset               offset of the image header in the partition(for fixtrx)\n");
+	"        -o offset               offset of the image header in the partition(for fixtrx / fixboss)\n");
 	}
-	if (mtd_fixtrx || mtd_fixseama || mtd_fixwrgg) {
+	if (mtd_fixtrx || mtd_fixseama || mtd_fixwrgg || mtd_fixboss) {
 		fprintf(stderr,
-	"        -c datasize             amount of data to be used for checksum calculation (for fixtrx / fixseama / fixwrgg)\n");
+	"        -c datasize             amount of data to be used for checksum calculation (for fixtrx / fixseama / fixboss)\n");
 	}
 	fprintf(stderr,
 #ifdef FIS_SUPPORT
@@ -909,6 +913,9 @@ int main (int argc, char **argv)
 		cmd = CMD_RESETBC;
 		device = argv[1];
 	} else if (((strcmp(argv[0], "fixtrx") == 0) && (argc == 2)) && mtd_fixtrx) {
+		cmd = CMD_FIXTRX;
+		device = argv[1];
+	} else if (((strcmp(argv[0], "fixboss") == 0) && (argc == 2)) && mtd_fixboss) {
 		cmd = CMD_FIXTRX;
 		device = argv[1];
 	} else if (((strcmp(argv[0], "fixseama") == 0) && (argc == 2)) && mtd_fixseama) {
