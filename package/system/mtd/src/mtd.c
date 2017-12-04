@@ -916,7 +916,7 @@ int main (int argc, char **argv)
 		cmd = CMD_FIXTRX;
 		device = argv[1];
 	} else if (((strcmp(argv[0], "fixboss") == 0) && (argc == 2)) && mtd_fixboss) {
-		cmd = CMD_FIXTRX;
+		cmd = CMD_FIXBOSS;
 		device = argv[1];
 	} else if (((strcmp(argv[0], "fixseama") == 0) && (argc == 2)) && mtd_fixseama) {
 		cmd = CMD_FIXSEAMA;
