@@ -623,7 +623,7 @@ define Device/RS353
   DEVICE_PROFILE := RS353
   DEVICE_TITLE := Bintec RS353
   KERNEL := kernel-bin | append-dtb | lzma | lzma-loader | rs353-cev
-  IMAGE/boss-image.cev = append-kernel | append-rootfs | pad-rootfs | rs353-boss-header
+  IMAGE/boss-image.cev = append-kernel | append-rootfs | pad-rootfs | rs353-boss-header | append-metadata
   IMAGES := boss-image.cev
   IMAGE_SIZE := 31232k
   DEVICE_PACKAGES := kmod-usb-dwc2 kmod-ath9k wpad-mini kmod-i2c-gpio kmod-swconfig wpad-mini kmod-ledtrig-usbdev kmod-rtc_drv_s35390a
