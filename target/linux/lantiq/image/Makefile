@@ -626,7 +626,7 @@ define Device/RS353
   IMAGE/boss-image.cev = append-kernel | append-rootfs | pad-rootfs | rs353-boss-header
   IMAGES := boss-image.cev
   IMAGE_SIZE := 31232k
-  DEVICE_PACKAGES := kmod-usb-dwc2 kmod-ath9k wpad-mini kmod-i2c-gpio kmod-swconfig wpad-mini kmod-ledtrig-usbdev kmod-usb-ledtrig-usbport
+  DEVICE_PACKAGES := kmod-usb-dwc2 kmod-ath9k wpad-mini kmod-i2c-gpio kmod-swconfig wpad-mini kmod-ledtrig-usbdev kmod-rtc_drv_s35390a
 endef
 TARGET_DEVICES += RS353
 

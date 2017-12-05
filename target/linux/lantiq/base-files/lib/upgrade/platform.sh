@@ -13,9 +13,19 @@ platform_pre_upgrade() {
 		nand_do_upgrade $1
 		;;
 	esac
+
 }
 
-# use default for platform_do_upgrade()
+platform_do_upgrade() {
+	local board=$(board_name)
+
+        case "$board" in
+	RS230|RS353)
+		default_do_upgrade $1
+		do_fixboss
+		;;
+	esac
+}
 
 disable_watchdog() {
 	killall watchdog
@@ -25,3 +35,8 @@ disable_watchdog() {
 	}
 }
 append sysupgrade_pre_upgrade disable_watchdog
+
+
+do_fixboss() {
+        mtd fixboss firmware
+}
