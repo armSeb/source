@@ -62,9 +62,10 @@ void board_init(void)
 	WRITEREG(LTQ_WDT_MEMBASE_CR, LTQ_WDT_PW1); // First magic word
 	WRITEREG(LTQ_WDT_MEMBASE_CR, LTQ_WDT_SR_EN | LTQ_WDT_SR_PWD | LTQ_WDT_SR_CLKDIV | LTQ_WDT_PW2 | LTQ_MAX_TIMEOUT);
 
-/*	uint32_t val = READREG32(RCU_MEMBASE);
-	printf("%08X\n", val);
-	if ((val&0x04000000) != 0x04000000) {
+	uint32_t val = READREG32(RCU_MEMBASE);
+	uint32_t gpio = READREG32(0xBE100B10);
+	printf("Reset status: %08X, gpio: %08X\n", val, gpio);
+/*	if ((val&0x04000000) != 0x04000000) {
 		val=READREG32(RCU_MEMBASE + RCU_RST_REQ);
 		val |= RCU_RD_GPHY1_XRX200 | RCU_RD_GPHY0_XRX200 | RCU_RD_SRST;
 		WRITEREG32(RCU_MEMBASE + RCU_RST_REQ, val);

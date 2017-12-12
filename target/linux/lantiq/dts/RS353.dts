@@ -182,20 +182,6 @@
 		mtd-mac-address = <&boardconfig 0x428>;
 		lantiq,switch;
 
-		ethernet@4 {
-			compatible = "lantiq,xrx200-pdi-port";
-			reg = <4>;
-			phy-mode = "gmii";
-			phy-handle = <&phy13>;
-		};
-
-		ethernet@5 {
-			compatible = "lantiq,xrx200-pdi-port";
-			reg = <2>;
-			phy-mode = "gmii";
-			phy-handle = <&phy11>;
-		};
-
 		ethernet@1 {
 			compatible = "lantiq,xrx200-pdi-port";
 			reg = <1>;
@@ -216,6 +202,21 @@
 			phy-mode = "rgmii";
 			phy-handle = <&phy2>;
 		};
+
+		ethernet@4 {
+			compatible = "lantiq,xrx200-pdi-port";
+			reg = <4>;
+			phy-mode = "gmii";
+			phy-handle = <&phy13>;
+		};
+
+		ethernet@5 {
+			compatible = "lantiq,xrx200-pdi-port";
+			reg = <2>;
+			phy-mode = "gmii";
+			phy-handle = <&phy11>;
+		};
+
 	};
 
 	mdio@0 {
