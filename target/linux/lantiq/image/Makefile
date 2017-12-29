@@ -736,6 +736,26 @@ define Device/arcadyan_vgv7519-brn
 endef
 TARGET_DEVICES += arcadyan_vgv7519-brn
 
+define Build/rs353-cev
+        rm -f $(KDIR)/boss.bin.gz
+        # Add CEV header (magic). The name "boss.bin" have to be in the gzip header.
+        echo -ne "\x10\x00\x00\x02\x00\x00\x00\x00\x43\x45\x56\x00\x00\x00\x00\x00" > $(KDIR)/boss.bin
+        # Append data
+        cat $@ >> $(KDIR)/boss.bin
+        # gzip the file
+        gzip $(KDIR)/boss.bin
+        # Add a fake BOSS header to align image to flash sectors.
+        dd if=/dev/zero of=$(KDIR)/boss.1 bs=52 count=1
+        cat $(KDIR)/boss.bin.gz >> $(KDIR)/boss.1
+        # Align with flash sector size minus boss header size
+        dd if=$(KDIR)/boss.1 of=$@ bs=131072 conv=sync
+endef
+
+define Build/rs353-boss-header
+        mkbossimg rs353 $@
+        mv bossImage.img $@
+endef
+
 define Device/bintec_rs353
   DEVICE_TITLE := Bintec RS353
   KERNEL := kernel-bin | append-dtb | lzma | lzma-loader | rs353-cev
