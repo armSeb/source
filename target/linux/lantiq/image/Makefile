@@ -619,6 +619,10 @@ define Build/rs353-boss-header
 	mv bossImage.img $@
 endef
 
+define Build/bootmon
+	cat /home/qa/bootmon.bin > $@
+endef
+
 define Device/RS353
   DEVICE_PROFILE := RS353
   DEVICE_TITLE := Bintec RS353
