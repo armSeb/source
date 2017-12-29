@@ -758,6 +758,7 @@ endef
 
 define Device/bintec_rs353
   DEVICE_TITLE := Bintec RS353
+  DEVICE_DTS := RS353
   KERNEL := kernel-bin | append-dtb | lzma | lzma-loader | rs353-cev
   IMAGE/boss-image.cev = append-kernel | append-rootfs | pad-rootfs | rs353-boss-header | append-metadata
   IMAGES := boss-image.cev
