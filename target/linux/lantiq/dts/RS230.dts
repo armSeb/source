@@ -3,7 +3,8 @@
 #include "danube.dtsi"
 
 / {
-	model = "RS230 - Bintec RS230";
+	compatible = "bintec,rs230", "lantiq,xway", "lantiq,danube";
+	model = "Bintec RS230";
 
 	chosen {
 		bootargs = "console=ttyLTQ0,115200 init=/etc/preinit";

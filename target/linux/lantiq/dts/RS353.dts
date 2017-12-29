@@ -3,7 +3,8 @@
 #include "vr9.dtsi"
 
 / {
-	model = "RS353 - Bintec Elmeg RS353";
+	compatible = "bintec,rs353", "lantiq,xway", "lantiq,vr9";
+	model = "Bintec Elmeg RS353";
 
 	chosen {
 		bootargs = "console=ttyLTQ0,115200";

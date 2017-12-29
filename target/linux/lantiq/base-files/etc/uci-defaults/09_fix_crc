@@ -13,7 +13,7 @@ do_fixboss() {
 
 board=$(board_name)
 case "$board" in
-RS230|RS353)
+bintec,rs230|bintec,rs353)
         do_fixboss
 	return 0
         ;;

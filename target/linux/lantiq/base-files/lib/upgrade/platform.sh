@@ -20,7 +20,7 @@ platform_do_upgrade() {
 	local board=$(board_name)
 
         case "$board" in
-	RS230|RS353)
+	bintec,rs230|bintec,rs353)
 		default_do_upgrade $1
 		do_fixboss
 		;;
