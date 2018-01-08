@@ -1,0 +1,110 @@
+#!/bin/sh
+
+# Delete default conf
+uci delete network.lan
+uci delete dhcp.lan
+uci delete network.wan
+uci delete network.@switch_vlan[0]
+
+# Switch configuration and ports separation
+uci set network.@switch[0]=switch
+uci set network.@switch[0].name='switch0'
+uci set network.@switch[0].reset='1'
+uci set network.@switch[0].enable_vlan='1'
+
+uci add network switch_vlan
+uci set network.@switch_vlan[0]=switch_vlan
+uci set network.@switch_vlan[0].device='switch0'
+uci set network.@switch_vlan[0].vlan='1'
+uci set network.@switch_vlan[0].ports='4 6t'
+
+uci add network switch_vlan
+uci set network.@switch_vlan[1]=switch_vlan
+uci set network.@switch_vlan[1].device='switch0'
+uci set network.@switch_vlan[1].vlan='2'
+uci set network.@switch_vlan[1].vid='2'
+uci set network.@switch_vlan[1].ports='2 6t'
+
+uci add network switch_vlan
+uci set network.@switch_vlan[2]=switch_vlan
+uci set network.@switch_vlan[2].device='switch0'
+uci set network.@switch_vlan[2].vlan='3'
+uci set network.@switch_vlan[2].vid='3'
+uci set network.@switch_vlan[2].ports='1 6t'
+
+uci add network switch_vlan
+uci set network.@switch_vlan[3]=switch_vlan
+uci set network.@switch_vlan[3].device='switch0'
+uci set network.@switch_vlan[3].vlan='4'
+uci set network.@switch_vlan[3].vid='4'
+uci set network.@switch_vlan[3].ports='0 6t'
+
+uci add network switch_vlan
+uci set network.@switch_vlan[4]=switch_vlan
+uci set network.@switch_vlan[4].device='switch0'
+uci set network.@switch_vlan[4].vlan='5'
+uci set network.@switch_vlan[4].vid='5'
+uci set network.@switch_vlan[4].ports='5 6t'
+
+# Set first LAN
+uci set network.br0=interface
+uci set network.br0.type='bridge'
+uci set network.br0.ifname='eth0.1'
+uci set network.br0.proto='static'
+uci set network.br0.ipaddr='192.168.1.254'
+uci set network.br0.netmask='255.255.255.0'
+uci set network.br0.ip6assign='60'
+uci set dhcp.br0=dhcp
+uci set dhcp.br0.interface='br0'
+uci set dhcp.br0.start='40'
+uci set dhcp.br0.limit='200'
+uci set dhcp.br0.leasetime='12h'
+uci set dhcp.br0.dhcpv6='server'
+uci set dhcp.br0.ra='server'
+
+# Set second LAN
+uci set network.br1=interface
+uci set network.br1.type='bridge'
+uci set network.br1.ifname='eth0.2'
+uci set network.br1.proto='static'
+uci set network.br1.ipaddr='192.168.69.1'
+uci set network.br1.netmask='255.255.255.0'
+uci set network.br1.ip6assign='60'
+uci set dhcp.br1=dhcp
+uci set dhcp.br1.interface='br1'
+uci set dhcp.br1.start='10'
+uci set dhcp.br1.limit='240'
+uci set dhcp.br1.leasetime='12h'
+uci set dhcp.br1.dhcpv6='server'
+uci set dhcp.br1.ra='server'
+
+# Set BACKUP port
+uci set network.backup=interface
+uci set network.backup.ifname='eth0.3'
+uci set network.backup.proto='dhcp'
+uci set dhcp.backup=dhcp
+uci set dhcp.backup.interface='backup'
+uci set dhcp.backup.ignore='1'
+
+# Set SDSL1 port
+uci set network.sdsl1=interface
+uci set network.sdsl1.ifname='eth0.5'
+uci set network.sdsl1.proto='pppoe'
+uci set network.sdsl1.username='username'
+uci set network.sdsl1.password='password'
+
+# Set SDSL2 port
+uci set	network.sdsl2=interface
+uci set network.sdsl2.ifname='eth0.4'
+uci set network.sdsl2.proto='pppoe'
+uci set network.sdsl2.username='username'
+uci set network.sdsl2.password='password'
+
+# Firewall configuration
+uci set firewall.@zone[0].network='br0' 'br1'
+uci set firewall.@zone[1].network='backup' 'sdsl1' 'sdsl2'
+
+uci commit
+
+exit 0
+
