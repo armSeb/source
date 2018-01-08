@@ -1,10 +1,17 @@
 #!/bin/sh
 
+# Set system parameters
+uci set system.@system[0].timezone='CET-1CEST,M3.5.0,M10.5.0/3' # Europe/Paris
+
+
 # Delete default conf
 uci delete network.lan
 uci delete dhcp.lan
 uci delete network.wan
 uci delete network.@switch_vlan[0]
+uci del_list firewall.@zone[0].network='lan'
+uci del_list firewall.@zone[1].network='wan'
+# uci del_list firewall.@zone[1].network='wan6'
 
 # Switch configuration and ports separation
 uci set network.@switch[0]=switch
@@ -101,8 +108,11 @@ uci set network.sdsl2.username='username'
 uci set network.sdsl2.password='password'
 
 # Firewall configuration
-uci set firewall.@zone[0].network='br0' 'br1'
-uci set firewall.@zone[1].network='backup' 'sdsl1' 'sdsl2'
+uci add_list firewall.@zone[0].network='br0'
+uci add_list firewall.@zone[0].network='br1'
+uci add_list firewall.@zone[1].network='backup'
+uci add_list firewall.@zone[1].network='sdsl1'
+uci add_list firewall.@zone[1].network='sdsl2'
 
 uci commit
 
