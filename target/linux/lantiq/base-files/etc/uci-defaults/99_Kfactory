@@ -3,11 +3,11 @@
 # Set system parameters
 uci set system.@system[0].timezone='CET-1CEST,M3.5.0,M10.5.0/3' # Europe/Paris
 
-
 # Delete default conf
 uci delete network.lan
 uci delete dhcp.lan
 uci delete network.wan
+uci delete network.atm
 uci delete network.@switch_vlan[0]
 uci del_list firewall.@zone[0].network='lan'
 uci del_list firewall.@zone[1].network='wan'
@@ -93,6 +93,19 @@ uci set dhcp.backup=dhcp
 uci set dhcp.backup.interface='backup'
 uci set dhcp.backup.ignore='1'
 
+# Set VDSL port
+uci set network.dsl=dsl
+uci set network.dsl.tone='av'
+uci set network.dsl.annex='a'
+uci set network.dsl.xfer_mode='atm'
+uci set network.vdsl=interface
+uci set network.vdsl.proto='pppoa'
+uci set network.vdsl.username='username'
+uci set network.vdsl.password='password'
+uci set network.vdsl.encaps='vc'
+uci set network.vdsl.vpi='8'
+uci set network.vdsl.vci='35'
+
 # Set SDSL1 port
 uci set network.sdsl1=interface
 uci set network.sdsl1.ifname='eth0.5'
@@ -111,6 +124,7 @@ uci set network.sdsl2.password='password'
 uci add_list firewall.@zone[0].network='br0'
 uci add_list firewall.@zone[0].network='br1'
 uci add_list firewall.@zone[1].network='backup'
+uci add_list firewall.@zone[1].network='vdsl'
 uci add_list firewall.@zone[1].network='sdsl1'
 uci add_list firewall.@zone[1].network='sdsl2'
 
