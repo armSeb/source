@@ -106,6 +106,7 @@ uci set network.vdsl.password='password'
 uci set network.vdsl.encaps='vc'
 uci set network.vdsl.vpi='8'
 uci set network.vdsl.vci='35'
+uci set network.vdsl.enabled='0'
 
 # Set SDSL1 port
 uci set network.sdsl1=interface
@@ -113,6 +114,7 @@ uci set network.sdsl1.ifname='eth0.5'
 uci set network.sdsl1.proto='pppoe'
 uci set network.sdsl1.username='username'
 uci set network.sdsl1.password='password'
+uci set network.sdsl1.enabled='0'
 
 # Set SDSL2 port
 uci set	network.sdsl2=interface
@@ -120,6 +122,7 @@ uci set network.sdsl2.ifname='eth0.4'
 uci set network.sdsl2.proto='pppoe'
 uci set network.sdsl2.username='username'
 uci set network.sdsl2.password='password'
+uci set network.sdsl2.enabled='0'
 
 # Firewall configuration
 uci add_list firewall.@zone[0].network='br0'
