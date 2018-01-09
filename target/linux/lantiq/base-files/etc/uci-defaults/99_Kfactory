@@ -94,6 +94,7 @@ uci set dhcp.backup.interface='backup'
 uci set dhcp.backup.ignore='1'
 
 # Set VDSL port
+uci set system.led_dsl.trigger='none' # Temp fix
 uci set network.dsl=dsl
 uci set network.dsl.tone='av'
 uci set network.dsl.annex='a'
