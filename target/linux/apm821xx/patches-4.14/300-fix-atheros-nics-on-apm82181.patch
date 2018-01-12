@@ -1,6 +1,6 @@
---- a/arch/powerpc/sysdev/ppc4xx_pci.c
-+++ b/arch/powerpc/sysdev/ppc4xx_pci.c
-@@ -1066,15 +1066,24 @@ static int __init apm821xx_pciex_init_po
+--- a/arch/powerpc/platforms/4xx/pci.c
++++ b/arch/powerpc/platforms/4xx/pci.c
+@@ -1060,15 +1060,24 @@ static int __init apm821xx_pciex_init_po
  	u32 val;
  
  	/*
@@ -33,7 +33,7 @@
  
  	if (port->endpoint)
  		val = PTYPE_LEGACY_ENDPOINT << 20;
-@@ -1091,9 +1100,12 @@ static int __init apm821xx_pciex_init_po
+@@ -1085,9 +1094,12 @@ static int __init apm821xx_pciex_init_po
  	mtdcri(SDR0, PESDR0_460EX_L0DRV, 0x00000130);
  	mtdcri(SDR0, PESDR0_460EX_L0CLK, 0x00000006);
  

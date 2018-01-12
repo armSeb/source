@@ -1,6 +1,6 @@
 --- a/drivers/net/ethernet/ibm/emac/core.c
 +++ b/drivers/net/ethernet/ibm/emac/core.c
-@@ -129,6 +129,7 @@ static inline void emac_report_timeout_e
+@@ -130,6 +130,7 @@ static inline void emac_report_timeout_e
  {
  	if (emac_has_feature(dev, EMAC_FTR_440GX_PHY_CLK_FIX |
  				  EMAC_FTR_460EX_PHY_CLK_FIX |
@@ -30,7 +30,7 @@
  #endif
  }
  
-@@ -2617,6 +2626,7 @@ static int emac_init_config(struct emac_
+@@ -2879,6 +2888,7 @@ static int emac_init_config(struct emac_
  		if (of_device_is_compatible(np, "ibm,emac-apm821xx")) {
  			dev->features |= (EMAC_APM821XX_REQ_JUMBO_FRAME_SIZE |
  					  EMAC_FTR_APM821XX_NO_HALF_DUPLEX |
@@ -40,7 +40,7 @@
  	} else if (of_device_is_compatible(np, "ibm,emac4")) {
 --- a/drivers/net/ethernet/ibm/emac/core.h
 +++ b/drivers/net/ethernet/ibm/emac/core.h
-@@ -333,6 +333,8 @@ struct emac_instance {
+@@ -335,6 +335,8 @@ struct emac_instance {
   */
  #define EMAC_FTR_APM821XX_NO_HALF_DUPLEX	0x00001000
  

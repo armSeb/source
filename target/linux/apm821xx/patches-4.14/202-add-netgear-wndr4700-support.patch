@@ -1,7 +1,7 @@
 --- a/arch/powerpc/platforms/44x/Makefile
 +++ b/arch/powerpc/platforms/44x/Makefile
-@@ -3,6 +3,7 @@ ifneq ($(CONFIG_PPC4xx_CPM),y)
- obj-$(CONFIG_44x)	+= idle.o
+@@ -4,6 +4,7 @@ ifneq ($(CONFIG_PPC4xx_CPM),y)
+ obj-y	+= idle.o
  endif
  obj-$(CONFIG_PPC44x_SIMPLE) += ppc44x_simple.o
 +obj-$(CONFIG_WNDR4700) += wndr4700.o
@@ -10,7 +10,7 @@
  obj-$(CONFIG_WARP)	+= warp.o
 --- a/arch/powerpc/platforms/44x/Kconfig
 +++ b/arch/powerpc/platforms/44x/Kconfig
-@@ -260,6 +260,19 @@ config ICON
+@@ -273,6 +273,19 @@ config ICON
  	help
  	  This option enables support for the AMCC PPC440SPe evaluation board.
  
