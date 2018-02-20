@@ -54,6 +54,7 @@
 
 #define TRX_MAGIC		0x48445230	/* "HDR0" */
 #define SEAMA_MAGIC		0x5ea3a417
+#define WRG_MAGIC		0x20040220
 #define WRGG03_MAGIC		0x20080321
 #define BINTEC_MAGIC		0x54454c44	/* TELDat */
 
@@ -77,6 +78,7 @@ enum mtd_image_format {
 	MTD_IMAGE_FORMAT_UNKNOWN,
 	MTD_IMAGE_FORMAT_TRX,
 	MTD_IMAGE_FORMAT_SEAMA,
+	MTD_IMAGE_FORMAT_WRG,
 	MTD_IMAGE_FORMAT_WRGG03,
 	MTD_IMAGE_FORMAT_BINTEC,
 };
@@ -207,6 +209,8 @@ image_check(int imagefd, const char *mtd)
 		imageformat = MTD_IMAGE_FORMAT_TRX;
 	else if (be32_to_cpu(magic) == SEAMA_MAGIC)
 		imageformat = MTD_IMAGE_FORMAT_SEAMA;
+	else if (le32_to_cpu(magic) == WRG_MAGIC)
+		imageformat = MTD_IMAGE_FORMAT_WRG;
 	else if (le32_to_cpu(magic) == WRGG03_MAGIC)
 		imageformat = MTD_IMAGE_FORMAT_WRGG03;
 	else if (le32_to_cpu(magic) == BINTEC_MAGIC)
@@ -218,7 +222,7 @@ image_check(int imagefd, const char *mtd)
 			ret = trx_check(imagefd, mtd, buf, &buflen);
 		break;
 	case MTD_IMAGE_FORMAT_SEAMA:
-		break;
+	case MTD_IMAGE_FORMAT_WRG:
 	case MTD_IMAGE_FORMAT_WRGG03:
 		break;
 	case MTD_IMAGE_FORMAT_BINTEC:
@@ -691,6 +695,10 @@ resume:
 			if (mtd_fixseama)
 				mtd_fixseama(mtd, 0, 0);
 			break;
+		case MTD_IMAGE_FORMAT_WRG:
+			if (mtd_fixwrg)
+				mtd_fixwrg(mtd, 0, 0);
+			break;
 		case MTD_IMAGE_FORMAT_WRGG03:
 			if (mtd_fixwrgg)
 				mtd_fixwrgg(mtd, 0, 0);
@@ -748,6 +756,10 @@ static void usage(void)
 	    fprintf(stderr,
 	"        fixseama                fix the checksum in a seama header on first boot\n");
 	}
+	if (mtd_fixwrg) {
+	    fprintf(stderr,
+	"        fixwrg                  fix the checksum in a wrg header on first boot\n");
+	}
 	if (mtd_fixwrgg) {
 	    fprintf(stderr,
 	"        fixwrgg                 fix the checksum in a wrgg header on first boot\n");
@@ -769,9 +781,9 @@ static void usage(void)
 	    fprintf(stderr,
 	"        -o offset               offset of the image header in the partition(for fixtrx / fixboss)\n");
 	}
-	if (mtd_fixtrx || mtd_fixseama || mtd_fixwrgg || mtd_fixboss) {
+	if (mtd_fixtrx || mtd_fixseama || mtd_fixwrg || mtd_fixwrgg || mtd_fixboss) {
 		fprintf(stderr,
-	"        -c datasize             amount of data to be used for checksum calculation (for fixtrx / fixseama / fixboss)\n");
+	"        -c datasize             amount of data to be used for checksum calculation (for fixtrx / fixseama / fixwrg / fixwrgg / fixboss)\n");
 	}
 	fprintf(stderr,
 #ifdef FIS_SUPPORT
@@ -813,6 +825,7 @@ int main (int argc, char **argv)
 		CMD_FIXTRX,
 		CMD_FIXBOSS,
 		CMD_FIXSEAMA,
+		CMD_FIXWRG,
 		CMD_FIXWRGG,
 		CMD_VERIFY,
 		CMD_DUMP,
@@ -931,6 +944,9 @@ int main (int argc, char **argv)
 	} else if (((strcmp(argv[0], "fixseama") == 0) && (argc == 2)) && mtd_fixseama) {
 		cmd = CMD_FIXSEAMA;
 		device = argv[1];
+	} else if (((strcmp(argv[0], "fixwrg") == 0) && (argc == 2)) && mtd_fixwrg) {
+		cmd = CMD_FIXWRG;
+		device = argv[1];
 	} else if (((strcmp(argv[0], "fixwrgg") == 0) && (argc == 2)) && mtd_fixwrgg) {
 		cmd = CMD_FIXWRGG;
 		device = argv[1];
@@ -1034,6 +1050,10 @@ int main (int argc, char **argv)
 		case CMD_FIXSEAMA:
 			if (mtd_fixseama)
 				mtd_fixseama(device, 0, data_size);
+			break;
+		case CMD_FIXWRG:
+			if (mtd_fixwrg)
+				mtd_fixwrg(device, 0, data_size);
 			break;
 		case CMD_FIXWRGG:
 			if (mtd_fixwrgg)
